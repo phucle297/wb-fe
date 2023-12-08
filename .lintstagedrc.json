@@ -1,0 +1,5 @@
+{
+  "src/**/*.+(ts|tsx)": ["eslint --fix", "prettier --write"],
+  "src/**/*.md": ["prettier --write"],
+  "src/**/*.scss": ["stylelint --fix --allow-empty-input"]
+}
