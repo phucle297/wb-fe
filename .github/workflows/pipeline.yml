@@ -4,7 +4,7 @@ name: Docker CI/CD Pipeline
 on:
   push:
     branches:
-      - master
+      - develop
 
 # Định nghĩa các jobs cần thực hiện
 jobs:
@@ -29,8 +29,8 @@ jobs:
       - name: Build and test
         # Build và test image được build ra bằng Docker
         run: |
-          docker build -t wb .
-          docker wb npm test
+          docker build -t reactjs-basic .
+          docker run reactjs-basic npm test
 
       - name: Push image to Docker Hub
         uses: docker/build-push-action@v2
@@ -38,7 +38,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/wb:${{ github.sha }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/reactjs-basic:${{ github.sha }}
 
   # Job 2: Deploy
   deploy:
@@ -55,11 +55,11 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             # Pull image mà được push lên DockerHub bên trên
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/wb:${{ github.sha }}
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/reactjs-basic:${{ github.sha }}
 
             # Dừng và gỡ bỏ container hiện tại (nếu có)
-            docker stop wb-container
-            docker rm wb-container
+            docker stop reactjs-container
+            docker rm reactjs-container
 
             # Chạy container mới với image đã pull về bên trên
-            docker run -d -p 80:3000 --name wb-container ${{ secrets.DOCKERHUB_USERNAME }}/wb:${{ github.sha }}
+            docker run -d -p 80:3000 --name reactjs-container ${{ secrets.DOCKERHUB_USERNAME }}/reactjs-basic:${{ github.sha }}
