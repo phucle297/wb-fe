@@ -4,6 +4,11 @@ COPY package.json /app/package.json
 RUN npm install --legacy--peer-deps --ignore-scripts
 COPY . /app
 RUN npm run build
-EXPOSE 3000
 
-CMD [ "npm", "run", "start" ]
+FROM nginx:alpine
+WORKDIR /usr/share/nginx/html
+RUN rm -rf ./*
+COPY --from=build /app/dist .
+COPY --from=build /app/nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
