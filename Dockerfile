@@ -1,14 +1,9 @@
 FROM node:20-slim AS build
 WORKDIR /app
 COPY package.json /app/package.json
-RUN npm install --legacy--peer-deps --ignore-scripts
+RUN pnpm install
 COPY . /app
-RUN npm run build
+RUN pnpm run build
+EXPOSE 3000
 
-FROM nginx:alpine
-WORKDIR /usr/share/nginx/html
-RUN rm -rf ./*
-COPY --from=build /app/dist .
-COPY --from=build /app/nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+CMD [ "pnpm", "run", "start" ]
