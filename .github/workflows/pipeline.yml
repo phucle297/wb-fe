@@ -25,7 +25,7 @@ jobs:
       - name: Build and test
         run: |
           docker build -t wb .
-          docker wb npm test
+          docker run wb npm test
 
       - name: Push image to Docker Hub
         uses: docker/build-push-action@v3
