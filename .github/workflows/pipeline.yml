@@ -48,4 +48,4 @@ jobs:
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/wb:${{ github.sha }}
             docker stop wb
             docker rm wb
-            docker run -d -p 80:3000 --name wb ${{ secrets.DOCKERHUB_USERNAME }}/wb:${{ github.sha }}
+            docker run -d -p 80:80 --name wb ${{ secrets.DOCKERHUB_USERNAME }}/wb:${{ github.sha }}
