@@ -6,7 +6,39 @@ on:
       - master
 
 jobs:
+  check_secrets:
+    name: Check secrets
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check secrets
+        run: |
+          if [ -z "${{ secrets.DOCKERHUB_USERNAME }}" ]; then
+            echo "DOCKERHUB_USERNAME is not set"
+            exit 1
+          fi
+
+          if [ -z "${{ secrets.DOCKERHUB_TOKEN }}" ]; then
+            echo "DOCKERHUB_TOKEN is not set"
+            exit 1
+          fi
+
+          if [ -z "${{ secrets.SERVER_HOST }}" ]; then
+            echo "SERVER_HOST is not set"
+            exit 1
+          fi
+
+          if [ -z "${{ secrets.SERVER_USER }}" ]; then
+            echo "SERVER_USER is not set"
+            exit 1
+          fi
+
+          if [ -z "${{ secrets.SSH_PRIVATE_KEY }}" ]; then
+            echo "SSH_PRIVATE_KEY is not set"
+            exit 1
+          fi
   build:
+    needs: check_secrets
     name: Build
     runs-on: ubuntu-latest
 
