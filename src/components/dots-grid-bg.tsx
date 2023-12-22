@@ -1,11 +1,23 @@
-const Dots = () => {
+import { useEffect, useState } from "react";
+
+const DotsGridBg = () => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    document.addEventListener("mousemove", handleMouseMove);
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
   return (
     <div className="pointer-events-none fixed left-0 top-0 -z-50 select-none">
       <div className="sticky left-0 top-0 h-screen w-screen overflow-hidden">
         <div className="absolute inset-0 z-[-1] bg-muted-foreground/20" />
         <div
           className="bg-gradient-radial absolute z-[-1] h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full from-primary from-0% to-transparent to-90% blur-md will-change-auto"
-          style={{ top: 67, left: 1224 }}
+          style={{ left: mousePosition.x, top: mousePosition.y }}
         />
         <svg height="100%" width="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -24,4 +36,4 @@ const Dots = () => {
   );
 };
 
-export default Dots;
+export default DotsGridBg;
