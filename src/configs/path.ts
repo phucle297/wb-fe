@@ -1,4 +1,7 @@
 export const PATH = {
   HOME: "/",
-  ABOUT: "/about",
+  CONTACT_US: "/contact-us",
+  DONATE: "/donate",
+  BLOGS: "/blogs",
+  SEARCH: "/search",
 };
