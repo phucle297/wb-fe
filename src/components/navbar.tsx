@@ -20,7 +20,7 @@ const Navbar = () => {
     return theme === "dark";
   };
   return (
-    <div className="flex h-full flex-1 items-center justify-between gap-x-2 bg-background px-4">
+    <div className="container mx-auto flex h-full flex-1 items-center justify-between gap-x-2 px-4">
       <Link className="flex h-1/2 cursor-pointer items-center space-x-4" to={"/"}>
         <h1 className={clsx("h-full text-2xl font-semibold", { invert: checkDarkMode() })}>
           <img className="h-full" src={Logo} />

@@ -12,7 +12,7 @@ import { Button } from "./ui/button";
 const Footer: FC = () => {
   return (
     <div className="w-full border-t-2 bg-[hsl(var(--background))]">
-      <div className="container grid grid-cols-4 gap-5 py-10">
+      <div className="container mx-auto grid grid-cols-4 gap-5 py-10">
         <div className="flex flex-col items-center justify-center">
           <img alt="logo" className="w-1/2 max-w-full" src={LogoFullRounded} />
         </div>

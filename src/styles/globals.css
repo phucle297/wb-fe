@@ -607,3 +607,30 @@ html {
 .bg-gradient-radial {
   background-image: radial-gradient(var(--tw-gradient-stops));
 }
+
+.slick-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 50;
+  transform: translate(-50%, -50%);
+  background-color: transparent2;
+}
+
+.slick-arrow.slick-prev {
+  left: 0;
+}
+
+.slick-arrow.slick-next {
+  right: 0;
+}
+
+.slick-dots {
+  z-index: 5;
+  bottom: 1.5rem !important;
+}
+
+.slick-dots li button::before {
+  color: hsl(var(--primary)) !important;
+  transition: all 0.3s ease-in-out;
+  font-size: 1rem !important;
+}

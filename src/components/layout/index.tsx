@@ -13,7 +13,7 @@ const Layout = () => {
 
       <Header />
 
-      <main className="container relative z-10 mt-[56px]">
+      <main className="relative z-10 mt-[56px]">
         <Outlet />
       </main>
 
