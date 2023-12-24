@@ -11,8 +11,7 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,scss,css,json}\" --config ./.prettierrc",
     "preinstall": "npx only-allow pnpm",
     "predev": "node -e \"if(process.env.npm_execpath.indexOf('pnpm') === -1) throw new Error('You must use pnpm command')\"",
-    "precommit": "lint-staged",
-    "prepush": "npm run lint && npm run format && npm run build && git add ."
+    "prepare": "husky install"
   },
   "engines": {
     "npm": "please-use-pnpm",
