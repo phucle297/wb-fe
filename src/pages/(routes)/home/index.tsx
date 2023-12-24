@@ -4,22 +4,22 @@ import { ButtonWithTooltip } from "@/components/button-with-tooltip";
 import ThemeColors from "@/components/theme-colors";
 import { ThemeToggle } from "@/components/theme-toggle";
 
-import styles from "./index.module.scss";
-
 const Home = () => {
   return (
-    <div className={styles.wrapper}>
+    <div className="relative z-10">
       <ThemeColors />
       <ThemeToggle />
-      <h1>Home</h1>
-      <ButtonWithTooltip
-        label="asd"
-        onClick={() => {
-          toast.success("asd");
-        }}
-      >
-        Button
-      </ButtonWithTooltip>
+      <div className="h-screen">
+        <h1>Home</h1>
+        <ButtonWithTooltip
+          label="asd"
+          onClick={() => {
+            toast.success("asd");
+          }}
+        >
+          Button
+        </ButtonWithTooltip>
+      </div>
     </div>
   );
 };
