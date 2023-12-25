@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import clsx from "clsx";
 import { Settings } from "lucide-react";
+import { useState } from "react";
 
 import { Color, useTheme } from "@/providers/theme-provider";
 import { COLORS, colorsSchema } from "@/types/colors";
@@ -8,6 +10,7 @@ import { Button } from "./ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 
 const ThemeColors = () => {
+  const [openMenu, setOpenMenu] = useState(false);
   const { setColor, color: colorDefault } = useTheme();
   const getColorPrimary = (color: Color | string) => {
     switch (color) {
@@ -32,10 +35,10 @@ const ThemeColors = () => {
     }
   };
   return (
-    <DropdownMenu>
+    <DropdownMenu open={openMenu} onOpenChange={setOpenMenu}>
       <DropdownMenuTrigger asChild>
         <Button className="transition-all" size="icon" variant="outline">
-          <Settings size={"16"} />
+          <Settings className={clsx("transition-all duration-300", openMenu && "rotate-180")} size={"16"} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="center">
