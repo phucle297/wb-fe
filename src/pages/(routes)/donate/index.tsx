@@ -1,10 +1,11 @@
-import Banner from "./components/banner";
+import Banner from "@/components/banner";
+
 import Content from "./components/content";
 
 const Donate = () => {
   return (
     <div>
-      <Banner />
+      <Banner title="Ủng hộ/Donate" />
       <Content />
     </div>
   );
