@@ -4,4 +4,5 @@ export const PATH = {
   DONATE: "/donate",
   BLOGS: "/blogs",
   SEARCH: "/search",
+  ABOUT_US: "/about-us",
 };

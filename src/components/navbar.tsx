@@ -21,13 +21,13 @@ const Navbar = () => {
   };
   return (
     <div className="container mx-auto flex h-full flex-1 items-center justify-between gap-x-2 px-4">
-      <Link className="flex h-1/2 cursor-pointer items-center space-x-4" to={"/"}>
+      <Link className="flex h-1/2 cursor-pointer items-center space-x-4" to={PATH.HOME}>
         <h1 className={clsx("h-full text-2xl font-semibold", { invert: checkDarkMode() })}>
           <img className="h-full" src={Logo} />
         </h1>
       </Link>
       <div className="group flex items-center gap-6">
-        <Link className="flex items-center gap-2" to={"/"}>
+        <Link className="flex items-center gap-2" to={PATH.HOME}>
           <span className="text-lg font-semibold transition-all duration-300 hover:text-[hsl(var(--primary))]">
             Home
           </span>
@@ -62,6 +62,11 @@ const Navbar = () => {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+        <Link className="flex items-center gap-2" to={PATH.ABOUT_US}>
+          <span className="text-lg font-semibold transition-all duration-300 hover:text-[hsl(var(--primary))]">
+            About us
+          </span>
+        </Link>
         <Link className="flex items-center gap-2" to={PATH.BLOGS}>
           <span className="text-lg font-semibold transition-all duration-300 hover:text-[hsl(var(--primary))]">
             Blogs
