@@ -5,6 +5,7 @@ import Layout from "@/components/layout";
 import { PATH } from "@/configs/path";
 
 import AboutUs from "../(routes)/about-us";
+import Donate from "../(routes)/donate";
 import Home from "../(routes)/home";
 
 export const router = createBrowserRouter([
@@ -19,6 +20,14 @@ export const router = createBrowserRouter([
       {
         path: PATH.ABOUT_US,
         element: <AboutUs />,
+      },
+      {
+        path: PATH.ABOUT_US,
+        element: <AboutUs />,
+      },
+      {
+        path: PATH.DONATE,
+        element: <Donate />,
       },
     ],
   },

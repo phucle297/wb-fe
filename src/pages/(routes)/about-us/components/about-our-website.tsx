@@ -12,8 +12,7 @@ const AboutOurWebsite = () => {
 
           <p className="opacity-70">Một dự án nho nhỏ để thỏa mãn sự wibu của bản thân và ăn xin online {":')"}</p>
           <p className="opacity-70">
-            Đây là nơi để mình đăng những ý kiến của mình và một số người bạn về các bộ Anime - Manga -
-            WebNovel/LightNovel
+            Đây là nơi để chúng tôi đăng những ý kiến của bản thân về một số bộ Anime - Manga - WebNovel/LightNovel
           </p>
         </div>
       </div>
