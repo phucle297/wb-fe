@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { default as Logo } from "@/assets/logo.png";
 import { PATH } from "@/configs/path";
@@ -14,6 +14,7 @@ import { Button } from "./ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const { theme } = useTheme();
   const { width } = useViewPortSize();
   const [openMenu, setOpenMenu] = useState(false);
@@ -48,35 +49,32 @@ const Navbar = () => {
               <DropdownMenuItem
                 onClick={() => {
                   setOpenMenu(false);
+                  navigate(PATH.SEARCH + "?type=anime");
                 }}
               >
-                <Link to={PATH.SEARCH + "?type=anime"}>
-                  <span className="text-lg font-semibold transition-all duration-300 hover:text-[hsl(var(--primary))]">
-                    Anime
-                  </span>
-                </Link>
+                <p className="w-full cursor-pointer text-lg font-semibold transition-all duration-300 hover:text-[hsl(var(--primary))]">
+                  Anime
+                </p>
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => {
                   setOpenMenu(false);
+                  navigate(PATH.SEARCH + "?type=manga");
                 }}
               >
-                <Link to={PATH.SEARCH + "?type=manga"}>
-                  <span className="text-lg font-semibold transition-all duration-300 hover:text-[hsl(var(--primary))]">
-                    Manga
-                  </span>
-                </Link>
+                <p className="w-full cursor-pointer text-lg font-semibold transition-all duration-300 hover:text-[hsl(var(--primary))]">
+                  Manga
+                </p>
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => {
                   setOpenMenu(false);
+                  navigate(PATH.SEARCH + "?type=wn-ln");
                 }}
               >
-                <Link to={PATH.SEARCH + "?type=wn-ln"}>
-                  <span className="text-lg font-semibold transition-all duration-300 hover:text-[hsl(var(--primary))]">
-                    Web Novel/Light Novel
-                  </span>
-                </Link>
+                <p className="w-full cursor-pointer text-lg font-semibold transition-all duration-300 hover:text-[hsl(var(--primary))]">
+                  Web Novel/Light Novel
+                </p>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -144,27 +142,36 @@ const Navbar = () => {
                       Types
                     </span>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem>
-                      <Link to={PATH.SEARCH + "?type=anime"}>
-                        <span className="text-lg font-semibold transition-all duration-300 hover:text-[hsl(var(--primary))]">
-                          Anime
-                        </span>
-                      </Link>
+                  <DropdownMenuContent className="w-screen ">
+                    <DropdownMenuItem
+                      onClick={() => {
+                        setOpenMenu(false);
+                        navigate(PATH.SEARCH + "?type=anime");
+                      }}
+                    >
+                      <p className="w-full cursor-pointer text-lg font-semibold transition-all duration-300 hover:text-[hsl(var(--primary))]">
+                        Anime
+                      </p>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Link to={PATH.SEARCH + "?type=manga"}>
-                        <span className="text-lg font-semibold transition-all duration-300 hover:text-[hsl(var(--primary))]">
-                          Manga
-                        </span>
-                      </Link>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        setOpenMenu(false);
+                        navigate(PATH.SEARCH + "?type=manga");
+                      }}
+                    >
+                      <p className="w-full cursor-pointer text-lg font-semibold transition-all duration-300 hover:text-[hsl(var(--primary))]">
+                        Manga
+                      </p>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Link to={PATH.SEARCH + "?type=wn-ln"}>
-                        <span className="text-lg font-semibold transition-all duration-300 hover:text-[hsl(var(--primary))]">
-                          Web Novel/Light Novel
-                        </span>
-                      </Link>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        setOpenMenu(false);
+                        navigate(PATH.SEARCH + "?type=wn-ln");
+                      }}
+                    >
+                      <p className="w-full cursor-pointer text-lg font-semibold transition-all duration-300 hover:text-[hsl(var(--primary))]">
+                        Web Novel/Light Novel
+                      </p>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
