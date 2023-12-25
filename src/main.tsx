@@ -17,8 +17,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ThemeProvider defaultTheme="dark" storageColorKey="color" storageThemeKey="theme">
       <ReduxProvider store={store}>
-        <RouterProvider router={router} />
         <ToastProvider />
+        <RouterProvider router={router} />
       </ReduxProvider>
     </ThemeProvider>
   </React.StrictMode>
