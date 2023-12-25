@@ -28,7 +28,7 @@ const Navbar = () => {
     <div className="container mx-auto flex h-full flex-1 items-center justify-between gap-x-2 px-4">
       <Link className="flex h-1/2 cursor-pointer items-center space-x-4" to={PATH.HOME}>
         <h1 className={clsx("h-full text-2xl font-semibold", { invert: checkDarkMode() })}>
-          <img className="h-full" src={Logo} />
+          <img alt="logo" className="h-full" src={Logo} />
         </h1>
       </Link>
       {width >= 768 && (
@@ -121,7 +121,7 @@ const Navbar = () => {
                 />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="w-screen">
               <DropdownMenuItem
                 onClick={() => {
                   setOpenMenu(false);
