@@ -8,6 +8,7 @@ import AboutUs from "../(routes)/about-us";
 import ContactUs from "../(routes)/contact-us";
 import Donate from "../(routes)/donate";
 import Home from "../(routes)/home";
+import Posts from "../(routes)/posts";
 
 export const router = createBrowserRouter([
   {
@@ -23,8 +24,8 @@ export const router = createBrowserRouter([
         element: <AboutUs />,
       },
       {
-        path: PATH.ABOUT_US,
-        element: <AboutUs />,
+        path: PATH.POSTS,
+        element: <Posts />,
       },
       {
         path: PATH.DONATE,

@@ -3,5 +3,6 @@ export const PATH = {
   CONTACT_US: "/contact-us",
   DONATE: "/donate",
   SEARCH: "/search",
+  POSTS: "/posts",
   ABOUT_US: "/about-us",
 };
