@@ -8,6 +8,7 @@ export const typesSchema = z.enum([
   "web_novel",
   "web_novel/light_novel",
   "light_novel/web_novel",
+  "anime",
 ]);
 
 export type TTypes = z.infer<typeof typesSchema>;
