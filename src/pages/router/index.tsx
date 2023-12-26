@@ -9,6 +9,7 @@ import ContactUs from "../(routes)/contact-us";
 import Donate from "../(routes)/donate";
 import Home from "../(routes)/home";
 import Posts from "../(routes)/posts";
+import ShortReviews from "../(routes)/short-reviews";
 
 export const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ export const router = createBrowserRouter([
       {
         path: PATH.CONTACT_US,
         element: <ContactUs />,
+      },
+      {
+        path: PATH.SHORT_REVIEWS,
+        element: <ShortReviews />,
       },
     ],
   },

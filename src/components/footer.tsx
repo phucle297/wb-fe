@@ -63,7 +63,10 @@ const Footer: FC = () => {
               <div key={category} className="flex items-center gap-2">
                 <ChevronRight className="text-[hsl(var(--primary))]" size={16} />
 
-                <NavLink className="transition-all duration-300 hover:opacity-80" to={"/search?categories=" + category}>
+                <NavLink
+                  className="transition-all duration-300 hover:opacity-80"
+                  to={"/short-review?categories=" + category}
+                >
                   <span>
                     {category[0].toUpperCase()}
                     {category.slice(1).replaceAll("_", " ")}
