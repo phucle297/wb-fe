@@ -145,7 +145,12 @@ export const TableReview = () => {
     const currentLimit = searchParams.get("limit") ?? 10;
     const types = searchParams.get("types") ?? "";
     setTypes(formatParamsTypes(types));
-    setData(ShortReviewsMockData.slice(Number(currentOffset), Number(currentOffset) + Number(currentLimit)));
+    setData(
+      ShortReviewsMockData.slice(
+        Number(currentOffset) * Number(currentLimit),
+        (Number(currentOffset) + 1) * Number(currentLimit)
+      )
+    );
     setPageCount(Math.ceil(ShortReviewsMockData.length / Number(currentLimit)));
     setPagination({
       pageIndex: Number(currentOffset),
@@ -162,7 +167,9 @@ export const TableReview = () => {
     const tempType = formatParamsTypes(type);
     const newData = getNewDataFilterSearchAndType(search, tempType);
     setTypes(tempType);
-    setData(newData.slice(Number(currentOffset), Number(currentOffset) + Number(currentLimit)));
+    setData(
+      newData.slice(Number(currentOffset) * Number(currentLimit), (Number(currentOffset) + 1) * Number(currentLimit))
+    );
     setPageCount(Math.ceil(newData.length / Number(currentLimit)));
     setPagination({
       pageIndex: Number(currentOffset),
@@ -177,7 +184,7 @@ export const TableReview = () => {
           const searchValue = event.target.value.toLocaleLowerCase();
           const newData = getNewDataFilterSearchAndType(searchValue, types);
           setPageCount(Math.ceil(newData.length / pagination.pageSize));
-          setData(newData.slice(0, 0 + pagination.pageSize));
+          setData(newData.slice(0, pagination.pageSize));
         }}
       />
       <DataTable table={table} />
