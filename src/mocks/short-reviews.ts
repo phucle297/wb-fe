@@ -73,7 +73,7 @@ export const ShortReviewsMockData: TShortReview[] = [
     categories: "Comedy, Harem, Romance, School, Slice of Life",
     writer: "permees",
     score: 9.8,
-    synopsis: "Chọn 1 trong 3 con trong harem, end đẹp",
+    synopsis: "Chọn 1 trong 3 em trong harem, end đẹp",
     review: "Giải quyết drama ổn, nam chính chọn 1 chứ không dây dưa thả thính nhiều trong harem",
     status: "Done",
     last_edited_time: "12/5/2023 14:45",

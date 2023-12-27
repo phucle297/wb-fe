@@ -3,12 +3,14 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   PaginationState,
+  SortingState,
   Updater,
   useReactTable,
 } from "@tanstack/react-table";
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
+import { default as PerMees } from "@/assets/permees.jpg";
 import { DataTableToolbar } from "@/components/data-table";
 import { DataTable } from "@/components/data-table/data-table";
 import { ShortReviewsMockData } from "@/mocks/short-reviews";
@@ -20,14 +22,23 @@ import Types from "./types";
 
 export const TableReview = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [pagination, setPagination] = React.useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
-  const [types, setTypes] = React.useState<TTypes[]>([]);
-  const [data, setData] = React.useState<TShortReview[]>([]);
-  const [pageCount, setPageCount] = React.useState(0);
+  const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
+  const [types, setTypes] = useState<TTypes[]>([]);
+  const [data, setData] = useState<TShortReview[]>([]);
+  const [pageCount, setPageCount] = useState(0);
+  const [sorting, setSorting] = useState<SortingState>([]);
+
   const columns: ColumnDef<TShortReview>[] = [
     {
       accessorKey: "name",
-      header: "Name",
+      header: ({ header }) => {
+        console.log(header);
+        return (
+          <p className="w-[200px]" onClick={() => {}}>
+            Name
+          </p>
+        );
+      },
     },
     {
       accessorKey: "type",
@@ -51,18 +62,84 @@ export const TableReview = () => {
     {
       accessorKey: "writer",
       header: "Writer",
+      cell: ({ row }) => {
+        const data = row.original;
+        let imgSrc = "";
+        switch (data.writer) {
+          case "permees":
+            imgSrc = PerMees;
+            break;
+          default:
+            imgSrc = "https://picsum.photos/100/100";
+            break;
+        }
+        return (
+          <div className="flex-center-y flex w-[100px] gap-2">
+            {imgSrc && <img alt="writer" className="h-8 w-8 rounded-full" src={imgSrc} />}
+            <p>{data.writer}</p>
+          </div>
+        );
+      },
     },
     {
       accessorKey: "score",
       header: "Score",
+      cell: ({ row }) => {
+        const data = row.original;
+        const score = Number(data.score);
+        return (
+          <div className="flex-center-y flex w-[100px] gap-2">
+            <div className="relative h-40 w-40">
+              <svg className="h-full w-full" viewBox="0 0 100 100">
+                {/* Background circle */}
+                <circle
+                  className="stroke-current text-[hsl(var(--muted))]"
+                  cx={50}
+                  cy={50}
+                  fill="transparent"
+                  r={30}
+                  strokeWidth={9.9}
+                />
+                {/* Progress circle */}
+                <circle
+                  className="progress-ring-circle stroke-current text-[hsl(var(--primary))]"
+                  cx={50}
+                  cy={50}
+                  fill="transparent"
+                  r={30}
+                  //? If you want to change the size of the progress, you have to change the r, stroke-dasharray in css, and stroke-dashoffset (540 if 400 and 405 if 300 for 100%)
+                  strokeDashoffset={`calc(300 - ((405 * ${score} / 10) * 45) / 100)`}
+                  strokeWidth={10}
+                />
+                {/* Center text */}
+                <text alignmentBaseline="middle" textAnchor="middle" x={50} y={50}>
+                  {score}
+                </text>
+              </svg>
+            </div>
+          </div>
+        );
+      },
     },
     {
       accessorKey: "synopsis",
-      header: "Synopsis",
+      header: () => {
+        return (
+          <p className="w-[500px]" onClick={() => {}}>
+            Synopsis
+          </p>
+        );
+      },
     },
     {
       accessorKey: "review",
-      header: "Review",
+      header: () => {
+        return (
+          <p className="w-[400px]" onClick={() => {}}>
+            Review
+          </p>
+        );
+      },
     },
     {
       accessorKey: "status",
@@ -70,7 +147,13 @@ export const TableReview = () => {
     },
     {
       accessorKey: "last_edited_time",
-      header: "Last Edited Time",
+      header: () => {
+        return (
+          <p className="w-[100px]" onClick={() => {}}>
+            Last Edited Time
+          </p>
+        );
+      },
     },
   ];
 
@@ -133,12 +216,13 @@ export const TableReview = () => {
   const table = useReactTable({
     columns,
     data,
-    state: { pagination },
+    state: { pagination, sorting },
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onPaginationChange: handlePaginationChange,
     manualPagination: true,
     pageCount,
+    onSortingChange: setSorting,
   });
   useEffect(() => {
     const currentOffset = searchParams.get("offset") ?? 0;
