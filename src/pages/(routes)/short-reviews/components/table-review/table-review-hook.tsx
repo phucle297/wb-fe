@@ -103,7 +103,7 @@ export const useTableReview = () => {
       header: ({ header }) => {
         const itemInSorting = sorting.find((item) => item.id === "name");
         return (
-          <div
+          <button
             className="flex-center-y w-[200px] cursor-pointer select-none gap-2 border-r-2"
             onClick={() => {
               header.column.toggleSorting();
@@ -113,7 +113,7 @@ export const useTableReview = () => {
             {itemInSorting && !itemInSorting?.desc && <ArrowDownAZ className={clsx("h-4 w-4")} />}
             {itemInSorting && itemInSorting?.desc && <ArrowUpAZ className={clsx("h-4 w-4")} />}
             {!itemInSorting && <ArrowDownUp className={clsx("h-4 w-4")} />}
-          </div>
+          </button>
         );
       },
     },
@@ -121,7 +121,7 @@ export const useTableReview = () => {
       accessorKey: "type",
       header: () => {
         return (
-          <div className="flex-center-y w-[200px] cursor-pointer select-none gap-2  border-r-2">
+          <div className="flex-center-y w-[200px] border-r-2">
             <p>Types</p>
           </div>
         );
@@ -172,7 +172,7 @@ export const useTableReview = () => {
       header: ({ header }) => {
         const itemInSorting = sorting.find((item) => item.id === "score");
         return (
-          <div
+          <button
             className="flex-center-y w-[100px] cursor-pointer select-none gap-2 border-r-2"
             onClick={() => {
               header.column.toggleSorting();
@@ -182,7 +182,7 @@ export const useTableReview = () => {
             {itemInSorting && !itemInSorting?.desc && <ArrowUp01 className={clsx("h-4 w-4")} />}
             {itemInSorting && itemInSorting?.desc && <ArrowDown01 className={clsx("h-4 w-4")} />}
             {!itemInSorting && <ArrowDownUp className={clsx("h-4 w-4")} />}
-          </div>
+          </button>
         );
       },
       cell: ({ row }) => {
@@ -227,31 +227,19 @@ export const useTableReview = () => {
     {
       accessorKey: "synopsis",
       header: () => {
-        return (
-          <p className="w-[500px] border-r-2" onClick={() => {}}>
-            Synopsis
-          </p>
-        );
+        return <p className="w-[500px] border-r-2">Synopsis</p>;
       },
     },
     {
       accessorKey: "review",
       header: () => {
-        return (
-          <p className="w-[400px] border-r-2" onClick={() => {}}>
-            Review
-          </p>
-        );
+        return <p className="w-[400px] border-r-2">Review</p>;
       },
     },
     {
       accessorKey: "status",
       header: () => {
-        return (
-          <p className="border-r-2" onClick={() => {}}>
-            Status
-          </p>
-        );
+        return <p className="border-r-2">Status</p>;
       },
     },
     {
@@ -259,7 +247,7 @@ export const useTableReview = () => {
       header: ({ header }) => {
         const itemInSorting = sorting.find((item) => item.id === "last_edited_time");
         return (
-          <div
+          <button
             className="flex-center-y w-[120px] cursor-pointer select-none gap-2"
             onClick={() => {
               header.column.toggleSorting();
@@ -269,7 +257,7 @@ export const useTableReview = () => {
             {itemInSorting && !itemInSorting?.desc && <ArrowDown01 className={clsx("h-4 w-4")} />}
             {itemInSorting && itemInSorting?.desc && <ArrowUp01 className={clsx("h-4 w-4")} />}
             {!itemInSorting && <ArrowDownUp className={clsx("h-4 w-4")} />}
-          </div>
+          </button>
         );
       },
     },
