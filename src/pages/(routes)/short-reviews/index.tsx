@@ -1,6 +1,6 @@
 import Title from "@/components/title";
 
-import { TableReview } from "./components/table-review";
+import { TableReview } from "./components/table-review/table-review";
 
 const ShortReviews = () => {
   return (

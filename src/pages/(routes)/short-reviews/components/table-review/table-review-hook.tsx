@@ -7,20 +7,21 @@ import {
   Updater,
   useReactTable,
 } from "@tanstack/react-table";
-import { useEffect, useState } from "react";
+import clsx from "clsx";
+import { ArrowDown01, ArrowDownAZ, ArrowDownUp, ArrowUp01, ArrowUpAZ } from "lucide-react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import { default as PerMees } from "@/assets/permees.jpg";
-import { DataTableToolbar } from "@/components/data-table";
-import { DataTable } from "@/components/data-table/data-table";
 import { ShortReviewsMockData } from "@/mocks/short-reviews";
 import { TShortReview } from "@/types/short-review";
-import { TTypes, typesSchema } from "@/types/types";
+import { TTypes } from "@/types/types";
 
-import Categories from "./categories";
-import Types from "./types";
+import Categories from "../categories";
+import Types from "../types";
+import { formatParamsTypes, getNewDataFilterSearchAndType } from "./table-review.helper";
 
-export const TableReview = () => {
+export const useTableReview = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
   const [types, setTypes] = useState<TTypes[]>([]);
@@ -28,22 +29,82 @@ export const TableReview = () => {
   const [pageCount, setPageCount] = useState(0);
   const [sorting, setSorting] = useState<SortingState>([]);
 
+  const handleChangeSearch = (event: ChangeEvent<HTMLInputElement>) => {
+    const searchValue = event.target.value.toLocaleLowerCase();
+    const newData = getNewDataFilterSearchAndType(searchValue, types);
+    setPageCount(Math.ceil(newData.length / pagination.pageSize));
+    setData(newData.slice(0, pagination.pageSize));
+  };
+  const handleSortChange = (updater: Updater<SortingState>) => {
+    setSorting((prev) => {
+      if (updater instanceof Function) {
+        const newSorting = updater(prev);
+        let listSort = [...newSorting];
+
+        listSort = listSort.filter((item) => item);
+
+        setSearchParams((prev) => {
+          prev.set("sort", listSort.map((item) => `${item.id},${item.desc ? "desc" : "asc"}`).join(";"));
+          return prev;
+        });
+        return listSort;
+      }
+      return updater;
+    });
+  };
+  const handlePaginationChange = (updater: Updater<PaginationState>) => {
+    setPagination((prev) => {
+      if (updater instanceof Function) {
+        const newPagination = updater(prev);
+        setSearchParams((prev) => {
+          prev.set("offset", String(newPagination.pageIndex));
+          prev.set("limit", String(newPagination.pageSize));
+          return prev;
+        });
+        return newPagination;
+      }
+      return updater;
+    });
+  };
   const columns: ColumnDef<TShortReview>[] = [
     {
       accessorKey: "name",
+
       header: ({ header }) => {
-        console.log(header);
+        const itemInSorting = sorting.find((item) => item.id === "name");
         return (
-          <p className="w-[200px]" onClick={() => {}}>
-            Name
-          </p>
+          <div
+            className="flex-center-y w-[200px] cursor-pointer select-none gap-2 border-r-2"
+            onClick={() => {
+              header.column.toggleSorting();
+            }}
+          >
+            <p>Name</p>
+            {itemInSorting && !itemInSorting?.desc && <ArrowUpAZ className={clsx("h-4 w-4")} />}
+            {itemInSorting && itemInSorting?.desc && <ArrowDownAZ className={clsx("h-4 w-4")} />}
+            {!itemInSorting && <ArrowDownUp className={clsx("h-4 w-4")} />}
+          </div>
         );
       },
     },
     {
       accessorKey: "type",
-      header: "Types",
-
+      header: ({ header }) => {
+        const itemInSorting = sorting.find((item) => item.id === "type");
+        return (
+          <div
+            className="flex-center-y w-[200px] cursor-pointer select-none gap-2  border-r-2"
+            onClick={() => {
+              header.column.toggleSorting();
+            }}
+          >
+            <p>Types</p>
+            {itemInSorting && !itemInSorting?.desc && <ArrowUpAZ className={clsx("h-4 w-4")} />}
+            {itemInSorting && itemInSorting?.desc && <ArrowDownAZ className={clsx("h-4 w-4")} />}
+            {!itemInSorting && <ArrowDownUp className={clsx("h-4 w-4")} />}
+          </div>
+        );
+      },
       cell: ({ row }) => {
         const data = row.original;
         const types = data.type.split(",");
@@ -52,7 +113,9 @@ export const TableReview = () => {
     },
     {
       accessorKey: "categories",
-      header: "Categories",
+      header: () => {
+        return <p className="border-r-2">Categories</p>;
+      },
       cell: ({ row }) => {
         const data = row.original;
         const categories = data.categories.split(",");
@@ -61,7 +124,9 @@ export const TableReview = () => {
     },
     {
       accessorKey: "writer",
-      header: "Writer",
+      header: () => {
+        return <p className="border-r-2">Writer</p>;
+      },
       cell: ({ row }) => {
         const data = row.original;
         let imgSrc = "";
@@ -83,7 +148,22 @@ export const TableReview = () => {
     },
     {
       accessorKey: "score",
-      header: "Score",
+      header: ({ header }) => {
+        const itemInSorting = sorting.find((item) => item.id === "score");
+        return (
+          <div
+            className="flex-center-y w-[100px] cursor-pointer select-none gap-2 border-r-2"
+            onClick={() => {
+              header.column.toggleSorting();
+            }}
+          >
+            <p>Score</p>
+            {itemInSorting && !itemInSorting?.desc && <ArrowUp01 className={clsx("h-4 w-4")} />}
+            {itemInSorting && itemInSorting?.desc && <ArrowDown01 className={clsx("h-4 w-4")} />}
+            {!itemInSorting && <ArrowDownUp className={clsx("h-4 w-4")} />}
+          </div>
+        );
+      },
       cell: ({ row }) => {
         const data = row.original;
         const score = Number(data.score);
@@ -125,7 +205,7 @@ export const TableReview = () => {
       accessorKey: "synopsis",
       header: () => {
         return (
-          <p className="w-[500px]" onClick={() => {}}>
+          <p className="w-[500px] border-r-2" onClick={() => {}}>
             Synopsis
           </p>
         );
@@ -135,7 +215,7 @@ export const TableReview = () => {
       accessorKey: "review",
       header: () => {
         return (
-          <p className="w-[400px]" onClick={() => {}}>
+          <p className="w-[400px] border-r-2" onClick={() => {}}>
             Review
           </p>
         );
@@ -143,91 +223,57 @@ export const TableReview = () => {
     },
     {
       accessorKey: "status",
-      header: "Status",
-    },
-    {
-      accessorKey: "last_edited_time",
       header: () => {
         return (
-          <p className="w-[100px]" onClick={() => {}}>
-            Last Edited Time
+          <p className="border-r-2" onClick={() => {}}>
+            Status
           </p>
         );
       },
     },
+    {
+      accessorKey: "last_edited_time",
+      header: ({ header }) => {
+        const itemInSorting = sorting.find((item) => item.id === "last_edited_time");
+        return (
+          <div
+            className="flex-center-y w-[120px] cursor-pointer select-none gap-2"
+            onClick={() => {
+              header.column.toggleSorting();
+            }}
+          >
+            <p>Last Edited Time</p>
+            {itemInSorting && !itemInSorting?.desc && <ArrowUp01 className={clsx("h-4 w-4")} />}
+            {itemInSorting && itemInSorting?.desc && <ArrowDown01 className={clsx("h-4 w-4")} />}
+            {!itemInSorting && <ArrowDownUp className={clsx("h-4 w-4")} />}
+          </div>
+        );
+      },
+    },
   ];
-
-  const handlePaginationChange = (updater: Updater<PaginationState>) => {
-    setPagination((prev) => {
-      if (updater instanceof Function) {
-        const newPagination = updater(prev);
-        setSearchParams((prev) => {
-          prev.set("offset", String(newPagination.pageIndex));
-          prev.set("limit", String(newPagination.pageSize));
-          return prev;
-        });
-        return newPagination;
-      }
-      return updater;
-    });
-  };
-  const getNewDataFilterSearchAndType = (search: string, types: TTypes[]) => {
-    const newData = ShortReviewsMockData.filter(
-      (shortReview) =>
-        shortReview.name.toLowerCase().includes(search) ||
-        shortReview.categories.toLowerCase().includes(search) ||
-        shortReview.review.toLowerCase().includes(search) ||
-        shortReview.status.toLowerCase().includes(search) ||
-        shortReview.synopsis.toLowerCase().includes(search) ||
-        shortReview.type.toLowerCase().includes(search) ||
-        shortReview.writer.toLowerCase().includes(search)
-    );
-    const dataFilterType = newData.filter((shortReview) => {
-      let typeInReview = shortReview.type.split(",");
-      typeInReview = typeInReview.map((item) => item.trim().toLowerCase().replaceAll(" ", "_").replaceAll("-", "_"));
-      return types.some((item) => typeInReview.includes(item));
-    });
-
-    return dataFilterType;
-  };
-  const formatParamsTypes: (type: string) => TTypes[] = (type: string) => {
-    let tempType = type
-      .split(",")
-      .filter((item) => item.trim().toLowerCase().replaceAll(" ", "_").replaceAll("-", "_"));
-    if (tempType.includes(typesSchema.enum.anime)) {
-      tempType.push(typesSchema.enum.anime_movie);
-      tempType.push(typesSchema.enum.anime_tv_series);
-    }
-    if (
-      tempType.includes("web_novel light_novel") ||
-      tempType.includes(typesSchema.enum.light_novel) ||
-      tempType.includes(typesSchema.enum.web_novel) ||
-      tempType.includes(typesSchema.enum["web_novel/light_novel"]) ||
-      tempType.includes(typesSchema.enum["light_novel/web_novel"])
-    ) {
-      tempType.push(typesSchema.enum.light_novel);
-      tempType.push(typesSchema.enum.web_novel);
-      tempType.push(typesSchema.enum["web_novel/light_novel"]);
-      tempType.push(typesSchema.enum["light_novel/web_novel"]);
-      tempType = tempType.filter((item) => item !== "web_novel light_novel");
-    }
-    return tempType as TTypes[];
-  };
   const table = useReactTable({
     columns,
     data,
+    enableColumnPinning: true,
+    initialState: {
+      columnPinning: {
+        left: ["name"],
+      },
+    },
     state: { pagination, sorting },
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onPaginationChange: handlePaginationChange,
     manualPagination: true,
     pageCount,
-    onSortingChange: setSorting,
+    enableSorting: true,
+    onSortingChange: handleSortChange,
   });
   useEffect(() => {
     const currentOffset = searchParams.get("offset") ?? 0;
     const currentLimit = searchParams.get("limit") ?? 10;
     const types = searchParams.get("types") ?? "";
+    const sort = searchParams.get("sort") ?? "";
     setTypes(formatParamsTypes(types));
     setData(
       ShortReviewsMockData.slice(
@@ -240,6 +286,17 @@ export const TableReview = () => {
       pageIndex: Number(currentOffset),
       pageSize: Number(currentLimit),
     });
+    setSorting(
+      sort
+        .split(";")
+        .map((item) => item.split(","))
+        .map((item) => {
+          return {
+            id: item[0],
+            desc: item[1] === "desc",
+          };
+        })
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -260,18 +317,16 @@ export const TableReview = () => {
       pageSize: Number(currentLimit),
     });
   }, [searchParams]);
-  return (
-    <div className="container my-10">
-      <DataTableToolbar
-        table={table}
-        onChangeSearch={(event) => {
-          const searchValue = event.target.value.toLocaleLowerCase();
-          const newData = getNewDataFilterSearchAndType(searchValue, types);
-          setPageCount(Math.ceil(newData.length / pagination.pageSize));
-          setData(newData.slice(0, pagination.pageSize));
-        }}
-      />
-      <DataTable table={table} />
-    </div>
-  );
+
+  return {
+    table,
+    pagination,
+    pageCount,
+    sorting,
+    types,
+    data,
+    handlePaginationChange,
+    handleSortChange,
+    handleChangeSearch,
+  };
 };
