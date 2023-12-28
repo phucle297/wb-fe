@@ -1,5 +1,6 @@
 import {
   ColumnDef,
+  ColumnSort,
   getCoreRowModel,
   getFilteredRowModel,
   PaginationState,
@@ -8,6 +9,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import clsx from "clsx";
+import dayjs from "dayjs";
 import { ArrowDown01, ArrowDownAZ, ArrowDownUp, ArrowUp01, ArrowUpAZ } from "lucide-react";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -31,23 +33,51 @@ export const useTableReview = () => {
 
   const handleChangeSearch = (event: ChangeEvent<HTMLInputElement>) => {
     const searchValue = event.target.value.toLocaleLowerCase();
-    const newData = getNewDataFilterSearchAndType(searchValue, types);
+    const newData = getNewDataFilterSearchAndType(ShortReviewsMockData, searchValue, types);
     setPageCount(Math.ceil(newData.length / pagination.pageSize));
     setData(newData.slice(0, pagination.pageSize));
+  };
+
+  const generateDataAfterSort = (data: TShortReview[], sort: ColumnSort) => {
+    let tempData = [...data];
+    if (sort) {
+      switch (sort.id) {
+        case "name":
+          if (sort.desc) {
+            tempData = tempData.sort((a, b) => b.name.localeCompare(a.name));
+          } else tempData = tempData.sort((a, b) => a.name.localeCompare(b.name));
+          break;
+
+        case "score":
+          if (sort.desc) {
+            tempData = tempData.sort((a, b) => Number(b.score) - Number(a.score));
+          } else tempData = tempData.sort((a, b) => Number(a.score) - Number(b.score));
+          break;
+
+        case "last_edited_time":
+          if (sort.desc) {
+            tempData = tempData.sort((a, b) => (dayjs(b.last_edited_time).isAfter(dayjs(a.last_edited_time)) ? 1 : -1));
+          } else
+            tempData = tempData.sort((a, b) => (dayjs(a.last_edited_time).isAfter(dayjs(b.last_edited_time)) ? 1 : -1));
+          break;
+
+        default:
+          break;
+      }
+    }
+
+    return tempData;
   };
   const handleSortChange = (updater: Updater<SortingState>) => {
     setSorting((prev) => {
       if (updater instanceof Function) {
         const newSorting = updater(prev);
-        let listSort = [...newSorting];
-
-        listSort = listSort.filter((item) => item);
 
         setSearchParams((prev) => {
-          prev.set("sort", listSort.map((item) => `${item.id},${item.desc ? "desc" : "asc"}`).join(";"));
+          prev.set("sort", newSorting.map((item) => `${item.id},${item.desc ? "desc" : "asc"}`).join(";"));
           return prev;
         });
-        return listSort;
+        return newSorting;
       }
       return updater;
     });
@@ -80,8 +110,8 @@ export const useTableReview = () => {
             }}
           >
             <p>Name</p>
-            {itemInSorting && !itemInSorting?.desc && <ArrowUpAZ className={clsx("h-4 w-4")} />}
-            {itemInSorting && itemInSorting?.desc && <ArrowDownAZ className={clsx("h-4 w-4")} />}
+            {itemInSorting && !itemInSorting?.desc && <ArrowDownAZ className={clsx("h-4 w-4")} />}
+            {itemInSorting && itemInSorting?.desc && <ArrowUpAZ className={clsx("h-4 w-4")} />}
             {!itemInSorting && <ArrowDownUp className={clsx("h-4 w-4")} />}
           </div>
         );
@@ -89,19 +119,10 @@ export const useTableReview = () => {
     },
     {
       accessorKey: "type",
-      header: ({ header }) => {
-        const itemInSorting = sorting.find((item) => item.id === "type");
+      header: () => {
         return (
-          <div
-            className="flex-center-y w-[200px] cursor-pointer select-none gap-2  border-r-2"
-            onClick={() => {
-              header.column.toggleSorting();
-            }}
-          >
+          <div className="flex-center-y w-[200px] cursor-pointer select-none gap-2  border-r-2">
             <p>Types</p>
-            {itemInSorting && !itemInSorting?.desc && <ArrowUpAZ className={clsx("h-4 w-4")} />}
-            {itemInSorting && itemInSorting?.desc && <ArrowDownAZ className={clsx("h-4 w-4")} />}
-            {!itemInSorting && <ArrowDownUp className={clsx("h-4 w-4")} />}
           </div>
         );
       },
@@ -125,7 +146,7 @@ export const useTableReview = () => {
     {
       accessorKey: "writer",
       header: () => {
-        return <p className="border-r-2">Writer</p>;
+        return <p className="w-[100px]  border-r-2">Writer</p>;
       },
       cell: ({ row }) => {
         const data = row.original;
@@ -139,7 +160,7 @@ export const useTableReview = () => {
             break;
         }
         return (
-          <div className="flex-center-y flex w-[100px] gap-2">
+          <div className="flex-center-y flex gap-2">
             {imgSrc && <img alt="writer" className="h-8 w-8 rounded-full" src={imgSrc} />}
             <p>{data.writer}</p>
           </div>
@@ -187,8 +208,10 @@ export const useTableReview = () => {
                   cy={50}
                   fill="transparent"
                   r={30}
-                  //? If you want to change the size of the progress, you have to change the r, stroke-dasharray in css, and stroke-dashoffset (540 if 400 and 405 if 300 for 100%)
-                  strokeDashoffset={`calc(300 - ((405 * ${score} / 10) * 45) / 100)`}
+                  //? https://stackoverflow.com/questions/77095324/create-a-circular-progress-bar-using-tailwind-css-in-react
+                  //? strokeDashOffset={400 - (400 * 45) / 100} + stroke-dasharray: 410, 400; will make a full circle
+                  //! why 410 and 400? i dunno :), but it works. The link above will explain why
+                  strokeDashoffset={`calc(400 - (400 * ${score} / 10 * 45) / 100)`}
                   strokeWidth={10}
                 />
                 {/* Center text */}
@@ -243,8 +266,8 @@ export const useTableReview = () => {
             }}
           >
             <p>Last Edited Time</p>
-            {itemInSorting && !itemInSorting?.desc && <ArrowUp01 className={clsx("h-4 w-4")} />}
-            {itemInSorting && itemInSorting?.desc && <ArrowDown01 className={clsx("h-4 w-4")} />}
+            {itemInSorting && !itemInSorting?.desc && <ArrowDown01 className={clsx("h-4 w-4")} />}
+            {itemInSorting && itemInSorting?.desc && <ArrowUp01 className={clsx("h-4 w-4")} />}
             {!itemInSorting && <ArrowDownUp className={clsx("h-4 w-4")} />}
           </div>
         );
@@ -267,6 +290,7 @@ export const useTableReview = () => {
     manualPagination: true,
     pageCount,
     enableSorting: true,
+    enablePinning: true,
     onSortingChange: handleSortChange,
   });
   useEffect(() => {
@@ -274,14 +298,10 @@ export const useTableReview = () => {
     const currentLimit = searchParams.get("limit") ?? 10;
     const types = searchParams.get("types") ?? "";
     const sort = searchParams.get("sort") ?? "";
+
     setTypes(formatParamsTypes(types));
-    setData(
-      ShortReviewsMockData.slice(
-        Number(currentOffset) * Number(currentLimit),
-        (Number(currentOffset) + 1) * Number(currentLimit)
-      )
-    );
-    setPageCount(Math.ceil(ShortReviewsMockData.length / Number(currentLimit)));
+
+    setPageCount(Math.ceil([...ShortReviewsMockData].length / Number(currentLimit)));
     setPagination({
       pageIndex: Number(currentOffset),
       pageSize: Number(currentLimit),
@@ -306,12 +326,24 @@ export const useTableReview = () => {
     const search = searchParams.get("search") ?? "";
     const type = searchParams.get("types") ?? "";
     const tempType = formatParamsTypes(type);
-    const newData = getNewDataFilterSearchAndType(search, tempType);
+    const sort = searchParams.get("sort") ?? "";
+    let finalData = [...ShortReviewsMockData];
+    const dataAfterSearchAndType = getNewDataFilterSearchAndType(finalData, search, tempType);
+    finalData = dataAfterSearchAndType;
+
+    if (sort) {
+      const sortObj = {
+        id: sort.split(",")[0],
+        desc: sort.split(",")[1] === "desc",
+      };
+      finalData = generateDataAfterSort(dataAfterSearchAndType, sortObj);
+    }
+
     setTypes(tempType);
     setData(
-      newData.slice(Number(currentOffset) * Number(currentLimit), (Number(currentOffset) + 1) * Number(currentLimit))
+      finalData.slice(Number(currentOffset) * Number(currentLimit), (Number(currentOffset) + 1) * Number(currentLimit))
     );
-    setPageCount(Math.ceil(newData.length / Number(currentLimit)));
+    setPageCount(Math.ceil(finalData.length / Number(currentLimit)));
     setPagination({
       pageIndex: Number(currentOffset),
       pageSize: Number(currentLimit),

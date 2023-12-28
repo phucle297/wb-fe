@@ -667,7 +667,7 @@ html {
 }
 
 .progress-ring-circle {
-  stroke-dasharray: 300, 300;
+  stroke-dasharray: 410, 400;
   transition: stroke-dashoffset 0.35s;
   transform: rotate(-90deg);
   transform-origin: 50% 50%;

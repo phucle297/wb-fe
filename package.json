@@ -54,6 +54,7 @@
     "cmdk": "^0.2.0",
     "d3-force-attract": "^0.1.1",
     "date-fns": "^3.0.5",
+    "dayjs": "^1.11.10",
     "husky": "^8.0.3",
     "i18next": "^23.7.8",
     "i18next-browser-languagedetector": "^7.2.0",

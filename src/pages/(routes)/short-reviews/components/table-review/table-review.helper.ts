@@ -1,4 +1,4 @@
-import { ShortReviewsMockData } from "@/mocks/short-reviews";
+import { TShortReview } from "@/types/short-review";
 import { TTypes, typesSchema } from "@/types/types";
 
 export const formatParamsTypes: (type: string) => TTypes[] = (type: string) => {
@@ -23,8 +23,8 @@ export const formatParamsTypes: (type: string) => TTypes[] = (type: string) => {
   return tempType as TTypes[];
 };
 
-export const getNewDataFilterSearchAndType = (search: string, types: TTypes[]) => {
-  const newData = ShortReviewsMockData.filter(
+export const getNewDataFilterSearchAndType = (data: TShortReview[], search: string, types: TTypes[]) => {
+  const newData = data.filter(
     (shortReview) =>
       shortReview.name.toLowerCase().includes(search) ||
       shortReview.categories.toLowerCase().includes(search) ||
