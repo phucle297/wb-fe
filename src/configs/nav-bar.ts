@@ -5,7 +5,7 @@ import { PATH } from "./path";
 export const NavBarLinks: TLink[] = [
   { title: "Home", link: PATH.HOME },
   {
-    title: "Types",
+    title: "Short Reviews",
     link: PATH.SHORT_REVIEWS,
     children: [
       { title: "Anime", link: PATH.SHORT_REVIEWS + "?types=anime" },

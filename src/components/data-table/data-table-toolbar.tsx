@@ -24,14 +24,14 @@ export function DataTableToolbar<TData>({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div className="flex-center-y mb-2 flex justify-between">
+    <div className="flex-center-y relative mb-2 flex w-full flex-wrap justify-between md:w-fit">
       {toolbarCustomActions ? toolbarCustomActions({ table }) : <div></div>}
-      <div className="flex-center-y  ml-auto flex gap-2">
-        <div className="relative w-fit">
+      <div className="flex-center-y relative ml-auto flex w-full gap-2 md:w-fit">
+        <div className="relative w-full">
           <Input
             autoFocus
-            className="h-8 w-[150px] lg:w-[250px]"
-            placeholder="Search..."
+            className="h-8 w-full lg:w-[250px]"
+            placeholder="Search"
             value={searchValue}
             onChange={(e) => {
               setSearchValue(e.target.value);

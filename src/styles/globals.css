@@ -672,3 +672,89 @@ html {
   transform: rotate(-90deg);
   transform-origin: 50% 50%;
 }
+
+.dropdown-container {
+  border: 1px solid hsl(var(--border)) !important;
+  background: hsl(var(--background)) !important;
+  border-radius: 0.125rem;
+  padding: 0.15rem 0;
+  box-shadow: none !important;
+}
+.dropdown-container[aria-expanded="true"] {
+  box-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) hsl(var(--primary)) !important;
+}
+.dropdown-container:focus-within {
+  outline: none !important;
+}
+.dropdown-heading {
+  background: hsl(var(--background));
+  border: none !important;
+  outline: none !important;
+  height: initial !important;
+  padding: 0.15rem 0.65rem !important;
+  border-radius: calc(0.5rem - 2px);
+}
+
+.dropdown-content {
+  font-size: 0.9rem !important;
+  color: hsl(var(--foreground));
+  left: 50%;
+  transform: translateX(-50%);
+}
+.dropdown-content .panel-content {
+  background: hsl(var(--background)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  border-radius: calc(0.5rem - 2px);
+}
+
+.select-item:hover {
+  background: hsl(var(--background)) !important;
+}
+.select-panel .search input {
+  background: hsl(var(--background)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  border-radius: calc(0.5rem - 2px);
+}
+
+.item-renderer {
+  align-items: center !important;
+  gap: 5px;
+}
+
+.item-renderer input[type="checkbox"] {
+  border-radius: 12px !important;
+  position: relative;
+  cursor: pointer;
+}
+
+.item-renderer input[type="checkbox"]::before {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 0;
+  left: 0;
+  border: 1px solid #555555;
+  border-radius: 2px;
+  background-color: hsl(var(--background));
+}
+
+.item-renderer input[type="checkbox"]:checked::after {
+  content: "";
+  display: block;
+  width: 5px;
+  height: 10px;
+  border: solid hsl(var(--primary));
+  border-width: 0 2px 2px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+  position: absolute;
+  top: 2px;
+  left: 6px;
+}
+
+.select-item.selected {
+  background: hsl(var(--input)) !important;
+}

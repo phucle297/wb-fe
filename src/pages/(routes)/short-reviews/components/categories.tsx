@@ -6,9 +6,10 @@ import { TBadgeColor } from "@/types/colors";
 
 type Props = {
   categories: string[];
+  noWrap?: boolean;
 };
 
-const Categories = ({ categories }: Props) => {
+const Categories = ({ categories, noWrap = false }: Props) => {
   const getVariant = (category: string) => {
     let variant: TBadgeColor;
     switch (category) {
@@ -107,7 +108,7 @@ const Categories = ({ categories }: Props) => {
     return variant;
   };
   return (
-    <div className="flex w-[200px] flex-row flex-wrap gap-2">
+    <div className={clsx("flex w-[200px] flex-row gap-2", !noWrap && "flex-wrap")}>
       {categories.map((item) => {
         const category = item.toLocaleLowerCase().trim().replaceAll(" ", "_").replaceAll("-", "_");
         const variant = getVariant(category);
