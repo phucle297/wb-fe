@@ -7,14 +7,14 @@ export const NavBarLinks: TLink[] = [
   {
     title: "Short Reviews",
     link: PATH.SHORT_REVIEWS,
-    children: [
-      { title: "Anime", link: PATH.SHORT_REVIEWS + "?types=anime" },
-      { title: "Manga", link: PATH.SHORT_REVIEWS + "?types=manga" },
-      { title: "Web Novel/Light Novel", link: PATH.SHORT_REVIEWS + "?types=web_novel+light_novel" },
-    ],
+    // children: [
+    //   { title: "Anime", link: PATH.SHORT_REVIEWS + "?types=anime" },
+    //   { title: "Manga", link: PATH.SHORT_REVIEWS + "?types=manga" },
+    //   { title: "Web Novel/Light Novel", link: PATH.SHORT_REVIEWS + "?types=web_novel+light_novel" },
+    // ],
   },
   { title: "About us", link: PATH.ABOUT_US },
-  { title: "Posts", link: PATH.POSTS },
+  { title: "Blogs", link: PATH.BLOGS },
   { title: "Donate", link: PATH.DONATE },
   { title: "Contacts us", link: PATH.CONTACT_US },
 ];

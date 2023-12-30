@@ -1,6 +1,5 @@
 import {
   ColumnDef,
-  ColumnSort,
   getCoreRowModel,
   getFilteredRowModel,
   PaginationState,
@@ -9,19 +8,24 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import clsx from "clsx";
-import dayjs from "dayjs";
 import { ArrowDown01, ArrowDownAZ, ArrowDownUp, ArrowUp01, ArrowUpAZ } from "lucide-react";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import { default as PerMees } from "@/assets/permees.jpg";
 import { ShortReviewsMockData } from "@/mocks/short-reviews";
+import { TCategories } from "@/types/categories";
 import { TShortReview } from "@/types/short-review";
 import { TTypes } from "@/types/types";
 
 import Categories from "../categories";
 import Types from "../types";
-import { formatParamsTypes, getNewDataFilterSearchAndType } from "./table-review.helper";
+import {
+  formatParamsTypes,
+  generateDataAfterSort,
+  getNewDataFilterCategories,
+  getNewDataFilterSearchAndType,
+} from "./table-review.helper";
 
 export const useTableReview = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -30,44 +34,45 @@ export const useTableReview = () => {
   const [data, setData] = useState<TShortReview[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const [sorting, setSorting] = useState<SortingState>([]);
-
+  const [search, setSearch] = useState<string>("");
+  const [categories, setCategories] = useState<TCategories[]>([]);
   const handleChangeSearch = (event: ChangeEvent<HTMLInputElement>) => {
     const searchValue = event.target.value.toLocaleLowerCase();
-    const newData = getNewDataFilterSearchAndType(ShortReviewsMockData, searchValue, types);
-    setPageCount(Math.ceil(newData.length / pagination.pageSize));
-    setData(newData.slice(0, pagination.pageSize));
+    const dataAfterSearchAndFilterType = getNewDataFilterSearchAndType(ShortReviewsMockData, searchValue, types);
+    const dataAfterFilterCategories = getNewDataFilterCategories(dataAfterSearchAndFilterType, categories);
+    const finalData = dataAfterFilterCategories;
+    setSearch(searchValue);
+    setPageCount(Math.ceil(finalData.length / pagination.pageSize));
   };
+  const handleChangeTypesAndCategories = (key: "types" | "categories", value: string[]) => {
+    let typesTemp: TTypes[] = [];
+    let categoriesTemp: TCategories[] = [];
 
-  const generateDataAfterSort = (data: TShortReview[], sort: ColumnSort) => {
-    let tempData = [...data];
-    if (sort) {
-      switch (sort.id) {
-        case "name":
-          if (sort.desc) {
-            tempData = tempData.sort((a, b) => b.name.localeCompare(a.name));
-          } else tempData = tempData.sort((a, b) => a.name.localeCompare(b.name));
-          break;
-
-        case "score":
-          if (sort.desc) {
-            tempData = tempData.sort((a, b) => Number(b.score) - Number(a.score));
-          } else tempData = tempData.sort((a, b) => Number(a.score) - Number(b.score));
-          break;
-
-        case "last_edited_time":
-          if (sort.desc) {
-            tempData = tempData.sort((a, b) => (dayjs(b.last_edited_time).isAfter(dayjs(a.last_edited_time)) ? 1 : -1));
-          } else
-            tempData = tempData.sort((a, b) => (dayjs(a.last_edited_time).isAfter(dayjs(b.last_edited_time)) ? 1 : -1));
-          break;
-
-        default:
-          break;
-      }
+    if (key === "types") {
+      typesTemp = value as TTypes[];
     }
+    if (key === "categories") {
+      categoriesTemp = value as TCategories[];
+    }
+    const dataAfterSearchAndFilterType = getNewDataFilterSearchAndType(
+      ShortReviewsMockData,
+      search,
+      typesTemp.length > 0 ? typesTemp : types
+    );
+    const dataAfterFilterCategories = getNewDataFilterCategories(
+      dataAfterSearchAndFilterType,
+      categoriesTemp.length > 0 ? categoriesTemp : categories
+    );
+    const finalData = [...dataAfterFilterCategories];
 
-    return tempData;
+    setSearchParams((prev) => {
+      prev.set(key, value.join(","));
+      prev.set("offset", "0");
+      return prev;
+    });
+    setPageCount(Math.ceil(finalData.length / pagination.pageSize));
   };
+
   const handleSortChange = (updater: Updater<SortingState>) => {
     setSorting((prev) => {
       if (updater instanceof Function) {
@@ -82,6 +87,7 @@ export const useTableReview = () => {
       return updater;
     });
   };
+
   const handlePaginationChange = (updater: Updater<PaginationState>) => {
     setPagination((prev) => {
       if (updater instanceof Function) {
@@ -96,6 +102,7 @@ export const useTableReview = () => {
       return updater;
     });
   };
+
   const columns: ColumnDef<TShortReview>[] = [
     {
       accessorKey: "name",
@@ -262,6 +269,7 @@ export const useTableReview = () => {
       },
     },
   ];
+
   const table = useReactTable({
     columns,
     data,
@@ -281,12 +289,15 @@ export const useTableReview = () => {
     enablePinning: true,
     onSortingChange: handleSortChange,
   });
+
   useEffect(() => {
     const currentOffset = searchParams.get("offset") ?? 0;
     const currentLimit = searchParams.get("limit") ?? 10;
     const types = searchParams.get("types") ?? "";
     const sort = searchParams.get("sort") ?? "";
+    const categories = searchParams.get("categories") ?? "";
 
+    setCategories(categories.split(",") as TCategories[]);
     setTypes(formatParamsTypes(types));
 
     setPageCount(Math.ceil([...ShortReviewsMockData].length / Number(currentLimit)));
@@ -315,16 +326,22 @@ export const useTableReview = () => {
     const type = searchParams.get("types") ?? "";
     const tempType = formatParamsTypes(type);
     const sort = searchParams.get("sort") ?? "";
+    const categories = searchParams.get("categories") ?? "";
     let finalData = [...ShortReviewsMockData];
     const dataAfterSearchAndType = getNewDataFilterSearchAndType(finalData, search, tempType);
-    finalData = dataAfterSearchAndType;
+    const dataAfterFilterCategories = getNewDataFilterCategories(
+      dataAfterSearchAndType,
+      categories.split(",") as TCategories[]
+    );
+
+    finalData = dataAfterFilterCategories;
 
     if (sort) {
       const sortObj = {
         id: sort.split(",")[0],
         desc: sort.split(",")[1] === "desc",
       };
-      finalData = generateDataAfterSort(dataAfterSearchAndType, sortObj);
+      finalData = generateDataAfterSort(finalData, sortObj);
     }
 
     setTypes(tempType);
@@ -348,5 +365,6 @@ export const useTableReview = () => {
     handlePaginationChange,
     handleSortChange,
     handleChangeSearch,
+    handleChangeTypesAndCategories,
   };
 };

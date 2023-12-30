@@ -40,7 +40,7 @@ const Types = ({ types }: Props) => {
         const variant = getVariant(type);
         return (
           <Badge key={type} className={clsx("whitespace-nowrap")} variant={variant}>
-            {item}
+            {item[0].toUpperCase() + item.slice(1).replaceAll("_", " ")}
           </Badge>
         );
       })}

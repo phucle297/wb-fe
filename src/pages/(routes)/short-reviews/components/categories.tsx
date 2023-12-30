@@ -115,7 +115,7 @@ const Categories = ({ categories, noWrap = false }: Props) => {
 
         return (
           <Badge key={category} className={clsx("whitespace-nowrap")} variant={variant}>
-            {item}
+            {item[0].toUpperCase() + item.slice(1).replaceAll("_", " ")}
           </Badge>
         );
       })}

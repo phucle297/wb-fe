@@ -5,10 +5,10 @@ import Layout from "@/components/layout";
 import { PATH } from "@/configs/path";
 
 import AboutUs from "../(routes)/about-us";
+import Blogs from "../(routes)/blogs";
 import ContactUs from "../(routes)/contact-us";
 import Donate from "../(routes)/donate";
 import Home from "../(routes)/home";
-import Posts from "../(routes)/posts";
 import ShortReviews from "../(routes)/short-reviews";
 
 export const router = createBrowserRouter([
@@ -25,8 +25,8 @@ export const router = createBrowserRouter([
         element: <AboutUs />,
       },
       {
-        path: PATH.POSTS,
-        element: <Posts />,
+        path: PATH.BLOGS,
+        element: <Blogs />,
       },
       {
         path: PATH.DONATE,

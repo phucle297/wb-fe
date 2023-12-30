@@ -10,5 +10,5 @@ export const optionsTypes: IOptionTypes[] = [
 ];
 export const optionsCategories: IOptionTypes[] = Object.keys(categoriesSchema.enum).map((item) => ({
   value: item,
-  label: item[0].toLowerCase() + item.slice(1).replaceAll("_", " "),
+  label: item[0].toUpperCase() + item.slice(1).replaceAll("_", " "),
 }));

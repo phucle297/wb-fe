@@ -4,5 +4,6 @@ export const PATH = {
   DONATE: "/donate",
   SHORT_REVIEWS: "/short-reviews",
   POSTS: "/posts",
+  BLOGS: "/blogs",
   ABOUT_US: "/about-us",
 };
