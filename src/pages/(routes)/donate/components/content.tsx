@@ -13,7 +13,7 @@ const Content = () => {
       </p>
       <p>
         Hiện tại dự án đang được thực hiện hoàn toàn bằng các nguồn lực cá nhân. Để sản xuất được nhiều nội dung chất
-        lượng hơn, chúng tôi rất m`ong nhận được sự ủng hộ về ý tưởng, lời khuyên và đặc biệt là về tài chính 🙂
+        lượng hơn, chúng tôi rất mong nhận được sự ủng hộ về ý tưởng, lời khuyên và đặc biệt là về tài chính 🙂
       </p>
 
       <p className="my-2">Các khoản đóng góp của các bạn sẽ được chúng tôi sử dụng để:</p>
