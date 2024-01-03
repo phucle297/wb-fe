@@ -1,5 +1,3 @@
-import React from "react";
-
 import { TBlog } from "@/types/blogs";
 
 type Props = {
