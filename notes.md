@@ -38,3 +38,5 @@ start_date?: timestamp
 end_date?: timestamp
 */
 ```
+
+note: fee of paypal (vietnam): 3.9% + 0.3$ (fixed fee) for each transaction

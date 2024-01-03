@@ -1,5 +1,5 @@
 import { nanoid } from "@reduxjs/toolkit";
-import { ChevronRight, Coffee } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { FC } from "react";
 import { NavLink } from "react-router-dom";
 
@@ -7,7 +7,7 @@ import { default as LogoFullRounded } from "@/assets/logo-full-rounded.png";
 import { getRandomItemsInArray } from "@/libs/random-items";
 import { CATEGORIES, categoriesSchema } from "@/types/categories";
 
-import { Button } from "./ui/button";
+import ButtonDonate from "./button-donate";
 
 const Footer: FC = () => {
   return (
@@ -81,10 +81,7 @@ const Footer: FC = () => {
           <p className="opacity-50">
             Nếu bài review về anime/manga yêu thích của bạn lâu ra, bạn có thể gửi cho Weeboo Time chút dopamine {":)"}
           </p>
-          <Button className="mt-4 flex gap-2">
-            <Coffee size={24} />
-            Bánh mì thơm và cà phê đắng
-          </Button>
+          <ButtonDonate />
         </div>
       </div>
       <div className="flex items-center justify-center border-t-2">
