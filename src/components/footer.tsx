@@ -17,31 +17,31 @@ const Footer: FC = () => {
           <img alt="logo" className="w-1/2 max-w-full" src={LogoFullRounded} />
         </div>
         <div className="">
-          <h3 className="mb-2 text-xl font-bold">Recent Posts</h3>
+          <h3 className="mb-2 text-xl font-bold">Recent Blogs</h3>
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <ChevronRight className="text-[hsl(var(--primary))]" size={16} />
 
-              <NavLink className="transition-all duration-300 hover:opacity-80" to={"/post/" + nanoid()}>
+              <NavLink className="transition-all duration-300 hover:opacity-80" to={"/blogs/" + nanoid()}>
                 <span>Frieren: khởi đầu từ kết thúc</span>
               </NavLink>
             </div>
 
             <div className="flex items-center gap-2">
               <ChevronRight className="text-[hsl(var(--primary))]" size={16} />
-              <NavLink className="transition-all duration-300 hover:opacity-80" to={"/post/" + nanoid()}>
+              <NavLink className="transition-all duration-300 hover:opacity-80" to={"/blogs/" + nanoid()}>
                 <span>Sự thành công của Anime tình cảm hài hước</span>
               </NavLink>
             </div>
             <div className="flex items-center gap-2">
               <ChevronRight className="text-[hsl(var(--primary))]" size={16} />
-              <NavLink className="transition-all duration-300 hover:opacity-80" to={"/post/" + nanoid()}>
+              <NavLink className="transition-all duration-300 hover:opacity-80" to={"/blogs/" + nanoid()}>
                 <span>Tổng hợp Anime mùa đông 2023</span>
               </NavLink>
             </div>
             <div className="flex items-center gap-2">
               <ChevronRight className="text-[hsl(var(--primary))]" size={16} />
-              <NavLink className="transition-all duration-300 hover:opacity-80" to={"/post/" + nanoid()}>
+              <NavLink className="transition-all duration-300 hover:opacity-80" to={"/blogs/" + nanoid()}>
                 <span>Rent a girlfriend: Biểu tượng của loser</span>
               </NavLink>
             </div>

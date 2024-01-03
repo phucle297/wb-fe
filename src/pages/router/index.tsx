@@ -5,6 +5,7 @@ import Layout from "@/components/layout";
 import { PATH } from "@/configs/path";
 
 import AboutUs from "../(routes)/about-us";
+import BlogDetail from "../(routes)/blog-detail";
 import Blogs from "../(routes)/blogs";
 import ContactUs from "../(routes)/contact-us";
 import Donate from "../(routes)/donate";
@@ -27,6 +28,10 @@ export const router = createBrowserRouter([
       {
         path: PATH.BLOGS,
         element: <Blogs />,
+      },
+      {
+        path: PATH.BLOGS_DETAIl,
+        element: <BlogDetail />,
       },
       {
         path: PATH.DONATE,
