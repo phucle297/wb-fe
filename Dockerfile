@@ -6,19 +6,10 @@ RUN npm install --legacy-peer-deps --ignore-scripts
 COPY . /app
 RUN npm run build
 
-# Stage 2: Set up Nginx with SSL
+# Stage 2: Set up Nginx with the application
 FROM nginx:alpine
 WORKDIR /usr/share/nginx/html
 RUN rm -rf ./*
-
-# Copy built files
 COPY --from=build /app/dist .
-
-# Update Nginx configuration
-COPY --from=build /app/nginx.conf /etc/nginx/conf.d/default.conf
-
-# Copy SSL certificates
-COPY --from=build /path/to/your/certs/fullchain.pem /etc/ssl/certs/
-COPY --from=build /path/to/your/certs/privkey.pem /etc/ssl/private/
-
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 ENTRYPOINT ["nginx", "-g", "daemon off;"]

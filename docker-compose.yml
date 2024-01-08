@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  nginx:
+    build: .
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./certs:/etc/letsencrypt
+      - ./nginx-conf:/etc/nginx/conf.d
+    restart: unless-stopped
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certs:/etc/letsencrypt
+      - ./nginx-conf:/etc/nginx/conf.d
+    entrypoint: >
+      /bin/sh -c '
+      if [ ! -d "/etc/letsencrypt/live/weeb.wiki" ]; then
+        certbot certonly --webroot --webroot-path=/var/www/certbot --email phucle.2971.dd@gmail.com --agree-tos --no-eff-email --cert-name weeb.wiki -d weeb.wiki -d www.weeb.wiki;
+      fi;
+      trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'
+    depends_on:
+      - nginx
