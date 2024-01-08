@@ -11,8 +11,9 @@ FROM nginx:alpine
 WORKDIR /usr/share/nginx/html
 
 # Install Certbot and create directory for SSL
-RUN apk add --no-cache certbot openssl && \
+RUN apk add --no-cache certbot certbot-nginx openssl && \
     mkdir -p /etc/nginx/ssl
+
 
 # Copy build output and NGINX configuration
 COPY --from=build /app/dist .
