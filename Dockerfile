@@ -1,4 +1,4 @@
-# Use Node.js as the base image for the build stage
+# Stage 1: Build the application
 FROM node:20-slim AS build
 WORKDIR /app
 COPY package.json /app/package.json
@@ -6,23 +6,19 @@ RUN npm install --legacy-peer-deps --ignore-scripts
 COPY . /app
 RUN npm run build
 
-# Use NGINX as the base image for the runtime stage
+# Stage 2: Set up Nginx with SSL
 FROM nginx:alpine
 WORKDIR /usr/share/nginx/html
+RUN rm -rf ./*
 
-# Install Certbot and create directory for SSL
-RUN apk update && \
-    apk add --no-cache certbot openssl cronie
-
-
-# Copy build output and NGINX configuration
+# Copy built files
 COPY --from=build /app/dist .
-COPY nginx.conf /etc/nginx/conf.d/nginx.conf
-COPY init-nginx.sh /init-nginx.sh
-RUN chmod +x /init-nginx.sh
 
-# Setup auto-renewal for Certbot
-RUN echo "0 12 * * * root /usr/bin/certbot renew --quiet --no-self-upgrade" >> /etc/crontabs/root
+# Update Nginx configuration
+COPY --from=build /app/nginx.conf /etc/nginx/conf.d/default.conf
 
-# Set the entrypoint script
-ENTRYPOINT ["/init-nginx.sh"]
+# Copy SSL certificates
+COPY --from=build /path/to/your/certs/fullchain.pem /etc/ssl/certs/
+COPY --from=build /path/to/your/certs/privkey.pem /etc/ssl/private/
+
+ENTRYPOINT ["nginx", "-g", "daemon off;"]

@@ -83,3 +83,12 @@ jobs:
             docker stop wb
             docker rm wb
             docker run -d -p 80:80 -p 443:443 --name wb ${{ secrets.DOCKERHUB_USERNAME }}/wb:${{ github.sha }}
+
+  renew_cert:
+    name: Renew SSL Certificate
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Renew SSL Certificate
+        run: |
+          sudo certbot renew --non-interactive --agree-tos
