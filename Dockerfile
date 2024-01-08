@@ -18,6 +18,7 @@ RUN apk add --no-cache certbot openssl && \
 COPY --from=build /app/dist .
 COPY nginx.conf /etc/nginx/conf.d/nginx.conf
 COPY init-nginx.sh /init-nginx.sh
+RUN chmod +x /init-nginx.sh
 
 # Setup auto-renewal for Certbot
 RUN echo "0 12 * * * root /usr/bin/certbot renew --quiet --no-self-upgrade" >> /etc/crontabs/root
