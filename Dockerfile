@@ -12,7 +12,7 @@ WORKDIR /usr/share/nginx/html
 
 # Install Certbot and create directory for SSL
 RUN apk update && \
-    apk add --no-cache certbot openssl cron
+    apk add --no-cache certbot openssl cronie
 
 
 # Copy build output and NGINX configuration
